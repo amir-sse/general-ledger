@@ -1,0 +1,30 @@
+
+
+entity Player {
+	firstName String
+    familyName String    
+}
+
+entity UserAccount {
+	number String
+    accountType String
+    hasNatureDebit Flag
+}
+
+entity Transaction {
+	balance BigDecimal required
+    amount BigDecimal required
+    isDebit Flag
+    timestamp LocalDate
+    appTransactionId String required unique
+}
+
+relationship ManyToOne {
+	UserAccount to Player
+    Transaction to UserAccount
+}
+
+enum Flag {
+	YES,
+    NO
+}

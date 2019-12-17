@@ -1,0 +1,3 @@
+id;customer_id;account_type;has_nature_debit
+1;1000;AAAA;YES
+2;1000;BBBB;NO

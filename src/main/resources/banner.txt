@@ -1,0 +1,4 @@
+>>> General Ledger v0.0.1 (Financial Bookkeeping) <<<
+
+  ${AnsiColor.GREEN}  Create by ${AnsiColor.RED} Amir Hajizadeh
+  :: https://www.linkedin.com/in/amirhajizadeh-ir/ ::

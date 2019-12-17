@@ -1,0 +1,52 @@
+logging:
+  level:
+    ROOT: DEBUG
+    io.github.jhipster: DEBUG
+    com.alten: DEBUG
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql: debug
+spring:
+  profiles:
+    active: dev
+    include:
+      - swagger
+  devtools:
+    restart:
+      enabled: true
+      additional-exclude: .h2.server.properties
+    livereload:
+      enabled: true
+  jackson:
+    serialization:
+      indent-output: true
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:file:./target/h2db/db/general-ledger;DB_CLOSE_DELAY=-1
+    username: user
+    password:
+    hikari:
+      poolName: Hikari
+      auto-commit: true
+      maximum-pool-size: 10
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: H2
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.jdbc.time_zone: CET
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+  liquibase:
+    # Remove 'faker' if you do not want the sample data to be loaded automatically
+    contexts: dev, faker

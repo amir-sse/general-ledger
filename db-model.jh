@@ -1,14 +1,8 @@
 
-
-entity Player {
-	firstName String
-    familyName String    
-}
-
-entity UserAccount {
-	number String
+entity CustomerAccount {
+	customerId String required
     accountType String
-    hasNatureDebit Flag
+    hasNatureDebit Flag required
 }
 
 entity Transaction {
@@ -20,8 +14,11 @@ entity Transaction {
 }
 
 relationship ManyToOne {
-	UserAccount to Player
-    Transaction to UserAccount
+    Transaction to CustomerAccount
+}
+
+relationship OneToONe {
+	CustomerAccount to Transaction
 }
 
 enum Flag {

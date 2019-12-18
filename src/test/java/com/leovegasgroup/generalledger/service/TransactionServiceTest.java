@@ -7,6 +7,7 @@ import com.leovegasgroup.generalledger.domain.enumeration.Flag;
 import com.leovegasgroup.generalledger.repository.CustomerAccountRepository;
 import com.leovegasgroup.generalledger.repository.TransactionRepository;
 import com.leovegasgroup.generalledger.service.dto.TransactionDTO;
+import com.leovegasgroup.generalledger.service.exception.DuplicateRequiredTransactionId;
 import com.leovegasgroup.generalledger.service.exception.InsufficientBalanceException;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,18 +32,18 @@ public class TransactionServiceTest {
     @Mock
     TransactionRepository transactionRepository;
 
-    CustomerAccountService customerAccountService;
-    TransactionService transactionService;
-    CustomerAccount defaultCustomerAccount;
-    Transaction initTransaction;
-    TransactionDTO debitTransactionDTO;
-    TransactionDTO creditTransactionDTO;
-    Transaction savedTransaction;
+    private CustomerAccountService customerAccountService;
+    private TransactionService transactionService;
+    private CustomerAccount defaultCustomerAccount;
+    private Transaction initTransaction;
+    private TransactionDTO debitTransactionDTO;
+    private TransactionDTO creditTransactionDTO;
+    private Transaction savedTransaction;
 
-    BigDecimal initBalance = BigDecimal.valueOf(240);
-    String initAppTransactionId = "100000";
-    String debitAppTransactionId = "100001";
-    String creditAppTransactionId = "100002";
+    private BigDecimal initBalance = BigDecimal.valueOf(240);
+    private String initAppTransactionId = "100000";
+    private String debitAppTransactionId = "100001";
+    private String creditAppTransactionId = "100002";
 
     @Before
     public void init() {
@@ -100,11 +101,10 @@ public class TransactionServiceTest {
         savedTransaction.setIsDebit(transactionArgumentCaptor.getValue().getIsDebit());
 
         assertEquals(initBalance, customerAccountService.calculateBalance(defaultCustomerAccount));
-
     }
 
     @Test(expected = InsufficientBalanceException.class)
-    public void issue_transaction_credit100threeTimesMockedDebitAccount_theLastTransactionShouldFail() {
+    public void issueTransaction_credit100threeTimesMockedDebitAccount_theLastTransactionShouldFail() {
         when(customerAccountRepository.getById(any())).thenReturn(Optional.of(defaultCustomerAccount));
 
         ArgumentCaptor<Transaction> transactionArgumentCaptor = ArgumentCaptor.forClass(Transaction.class);
@@ -124,7 +124,16 @@ public class TransactionServiceTest {
         assertEquals(initBalance.subtract(BigDecimal.valueOf(200)), customerAccountService.calculateBalance(defaultCustomerAccount));
 
         transactionService.issueTransaction(creditTransactionDTO);
+    }
 
+    @Test(expected = DuplicateRequiredTransactionId.class)
+    public void issueTransaction_WithUsedAppTransactionId_shouldFail() {
+        savedTransaction.setAppTransactionId(debitAppTransactionId);
+        Optional<Transaction> foundTransactionWithUsedAppTransactionId = Optional.of(savedTransaction);
+
+        when(transactionRepository.getFirstByAppTransactionId(any())).thenReturn(foundTransactionWithUsedAppTransactionId);
+
+        transactionService.issueTransaction(debitTransactionDTO);
     }
 
 }

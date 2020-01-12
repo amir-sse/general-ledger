@@ -1,8 +1,7 @@
 logging:
   level:
     ROOT: DEBUG
-    io.github.jhipster: DEBUG
-    com.alten: DEBUG
+    com.leovegasgroup.generalledger: DEBUG
     org:
       hibernate:
         SQL: debug

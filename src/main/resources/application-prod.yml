@@ -1,8 +1,7 @@
 logging:
   level:
-    ROOT: DEBUG
-    com.alten: DEBUG
-    io.github.jhipster: DEBUG
+    ROOT: INFO
+    com.leovegasgroup.generalledger: INFO
 spring:
   devtools:
     restart:
